@@ -28,7 +28,7 @@ export class SigSentryClient {
 
   constructor(config: SigSentryClientConfig) {
     this.apiKey = config.apiKey;
-    this.baseUrl = (config.baseUrl ?? 'https://api.sigsentry.dev').replace(/\/$/, '');
+    this.baseUrl = (config.baseUrl ?? 'https://api.sigsentry.com').replace(/\/$/, '');
   }
 
   private headers(): Record<string, string> {

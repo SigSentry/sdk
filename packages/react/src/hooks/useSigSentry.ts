@@ -10,24 +10,24 @@ import type {
 } from '@sigsentry/core';
 import { SigSentryClient } from '@sigsentry/core';
 
-export type TracebackStatus = AnalysisStage | 'idle';
+export type SigSentryStatus = AnalysisStage | 'idle';
 
-export interface UseTracebackOptions {
+export interface UseSigSentryOptions {
   client: SigSentryClient;
 }
 
-export interface UseTracebackReturn {
+export interface UseSigSentryReturn {
   submitAnalysis: (input: Omit<AnalysisInput, 'screenshot'> & { screenshot?: File }) => Promise<void>;
   askFollowUp: (question: string) => Promise<ApiResponse<FollowUpResult> | null>;
   submitFeedback: (feedback: Omit<AnalysisFeedback, 'analysisId'>) => Promise<ApiResponse<void> | null>;
-  status: TracebackStatus;
+  status: SigSentryStatus;
   result: AnalysisResult | null;
   error: ApiError | null;
   isLoading: boolean;
 }
 
-export function useSigSentry({ client }: UseTracebackOptions): UseTracebackReturn {
-  const [status, setStatus] = useState<TracebackStatus>('idle');
+export function useSigSentry({ client }: UseSigSentryOptions): UseSigSentryReturn {
+  const [status, setStatus] = useState<SigSentryStatus>('idle');
   const [result, setResult] = useState<AnalysisResult | null>(null);
   const [error, setError] = useState<ApiError | null>(null);
   const [isLoading, setIsLoading] = useState(false);

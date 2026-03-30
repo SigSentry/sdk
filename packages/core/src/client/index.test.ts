@@ -38,7 +38,7 @@ describe('SigSentryClient', () => {
       defaultClient.getAnalysis('abc');
 
       expect(mockFetch).toHaveBeenCalledWith(
-        'https://api.sigsentry.dev/v1/analyses/abc',
+        'https://api.sigsentry.com/v1/analyses/abc',
         expect.anything(),
       );
     });

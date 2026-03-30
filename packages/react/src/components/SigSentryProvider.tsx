@@ -2,24 +2,24 @@ import React, { createContext, useContext, useMemo, useEffect, useState } from '
 import { SigSentryClient } from '@sigsentry/core';
 import type { SigSentryClientConfig } from '@sigsentry/core';
 
-export type TracebackTheme = 'light' | 'dark' | 'auto';
+export type SigSentryTheme = 'light' | 'dark' | 'auto';
 
 export interface SigSentryProviderProps {
   apiKey: string;
   baseUrl?: string;
-  theme?: TracebackTheme;
+  theme?: SigSentryTheme;
   children: React.ReactNode;
 }
 
-interface TracebackContextValue {
+interface SigSentryContextValue {
   client: SigSentryClient;
-  theme: TracebackTheme;
+  theme: SigSentryTheme;
 }
 
-const TracebackContext = createContext<TracebackContextValue | null>(null);
+const SigSentryContext = createContext<SigSentryContextValue | null>(null);
 
-export function useSigSentryContext(): TracebackContextValue {
-  const context = useContext(TracebackContext);
+export function useSigSentryContext(): SigSentryContextValue {
+  const context = useContext(SigSentryContext);
   if (!context) {
     throw new Error('useSigSentryContext must be used within a <SigSentryProvider>');
   }
@@ -59,10 +59,10 @@ export function SigSentryProvider({
   const value = useMemo(() => ({ client, theme }), [client, theme]);
 
   return (
-    <TracebackContext.Provider value={value}>
-      <div data-theme={resolvedTheme} style={{ fontFamily: 'var(--sg-font-family)' }}>
+    <SigSentryContext.Provider value={value}>
+      <div data-theme={resolvedTheme} style={{ fontFamily: 'var(--tb-font-family)' }}>
         {children}
       </div>
-    </TracebackContext.Provider>
+    </SigSentryContext.Provider>
   );
 }

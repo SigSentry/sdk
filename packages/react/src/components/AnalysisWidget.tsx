@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useRef } from 'react';
 import type { AnalysisResult, AnalysisStage, ApiError } from '@sigsentry/core';
-import { useSigSentryContext } from './TracebackProvider.js';
-import { useSigSentry, type TracebackStatus } from '../hooks/useTraceback.js';
+import { useSigSentryContext } from './SigSentryProvider.js';
+import { useSigSentry, type SigSentryStatus } from '../hooks/useSigSentry.js';
 import { AnalysisResultDisplay } from './AnalysisResult.js';
 
 export type TimeRangeOption = '15m' | '30m' | '1h' | '4h' | '12h' | '24h';
@@ -11,12 +11,13 @@ export interface AnalysisWidgetProps {
   onError?: (error: ApiError) => void;
   defaultTimeRange?: TimeRangeOption;
   showFollowUp?: boolean;
+  showScreenshot?: boolean;
   className?: string;
 }
 
 const TIME_RANGE_OPTIONS: { value: TimeRangeOption; label: string; ms: number }[] = [
-  { value: '15m', label: 'Last 15 minutes', ms: 15 * 60 * 1000 },
-  { value: '30m', label: 'Last 30 minutes', ms: 30 * 60 * 1000 },
+  { value: '15m', label: 'Last 15 min', ms: 15 * 60 * 1000 },
+  { value: '30m', label: 'Last 30 min', ms: 30 * 60 * 1000 },
   { value: '1h', label: 'Last 1 hour', ms: 60 * 60 * 1000 },
   { value: '4h', label: 'Last 4 hours', ms: 4 * 60 * 60 * 1000 },
   { value: '12h', label: 'Last 12 hours', ms: 12 * 60 * 60 * 1000 },
@@ -34,127 +35,154 @@ const STAGE_LABELS: Record<AnalysisStage, string> = {
   failed: 'Analysis failed',
 };
 
-const styles = {
+const spinKeyframes = `@keyframes tb-spin { to { transform: rotate(360deg); } }`;
+
+const s = {
   container: {
-    fontFamily: 'var(--sg-font-family)',
-    color: 'var(--sg-color-text)',
-    backgroundColor: 'var(--sg-color-bg)',
-    borderRadius: 'var(--sg-border-radius)',
-    border: '1px solid var(--sg-color-border)',
-    padding: 'calc(var(--sg-spacing-unit) * 5)',
-  } satisfies React.CSSProperties,
+    fontFamily: 'var(--tb-font-family)',
+    color: 'var(--tb-color-text)',
+    backgroundColor: 'var(--tb-color-bg)',
+    borderRadius: 'var(--tb-border-radius)',
+    border: '1px solid var(--tb-color-border)',
+    padding: 20,
+  } as React.CSSProperties,
   form: {
     display: 'flex',
     flexDirection: 'column' as const,
-    gap: 'calc(var(--sg-spacing-unit) * 4)',
-  } satisfies React.CSSProperties,
+    gap: 16,
+  } as React.CSSProperties,
   label: {
     display: 'block',
-    fontWeight: 600,
-    fontSize: 'var(--sg-font-size-sm)',
-    marginBottom: 'calc(var(--sg-spacing-unit) * 1)',
-    color: 'var(--sg-color-text)',
-  } satisfies React.CSSProperties,
+    fontWeight: 500,
+    fontSize: 'var(--tb-font-size-sm)',
+    marginBottom: 6,
+    color: 'var(--tb-color-text-secondary)',
+  } as React.CSSProperties,
   textarea: {
     width: '100%',
-    minHeight: '100px',
-    padding: 'calc(var(--sg-spacing-unit) * 3)',
-    borderRadius: 'var(--sg-border-radius)',
-    border: '1px solid var(--sg-color-border)',
-    backgroundColor: 'var(--sg-color-bg)',
-    color: 'var(--sg-color-text)',
-    fontFamily: 'var(--sg-font-family)',
-    fontSize: 'var(--sg-font-size-base)',
+    minHeight: 90,
+    padding: 10,
+    borderRadius: 'var(--tb-border-radius)',
+    border: '1px solid var(--tb-color-border)',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    color: 'var(--tb-color-text)',
+    fontFamily: 'var(--tb-font-family)',
+    fontSize: 'var(--tb-font-size-sm)',
     resize: 'vertical' as const,
     boxSizing: 'border-box' as const,
-  } satisfies React.CSSProperties,
+    outline: 'none',
+  } as React.CSSProperties,
   select: {
     width: '100%',
-    padding: 'calc(var(--sg-spacing-unit) * 2) calc(var(--sg-spacing-unit) * 3)',
-    borderRadius: 'var(--sg-border-radius)',
-    border: '1px solid var(--sg-color-border)',
-    backgroundColor: 'var(--sg-color-bg)',
-    color: 'var(--sg-color-text)',
-    fontFamily: 'var(--sg-font-family)',
-    fontSize: 'var(--sg-font-size-base)',
+    padding: '8px 10px',
+    borderRadius: 'var(--tb-border-radius)',
+    border: '1px solid var(--tb-color-border)',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    color: 'var(--tb-color-text)',
+    fontFamily: 'var(--tb-font-family)',
+    fontSize: 'var(--tb-font-size-sm)',
     boxSizing: 'border-box' as const,
-  } satisfies React.CSSProperties,
-  button: {
-    padding: 'calc(var(--sg-spacing-unit) * 3) calc(var(--sg-spacing-unit) * 5)',
-    borderRadius: 'var(--sg-border-radius)',
+    outline: 'none',
+  } as React.CSSProperties,
+  btn: {
+    padding: '10px 20px',
+    borderRadius: 'var(--tb-border-radius)',
     border: 'none',
-    backgroundColor: 'var(--sg-color-primary)',
-    color: '#ffffff',
-    fontFamily: 'var(--sg-font-family)',
-    fontSize: 'var(--sg-font-size-base)',
+    backgroundColor: 'var(--tb-color-primary)',
+    color: 'var(--tb-color-primary-text)',
+    fontFamily: 'var(--tb-font-family)',
+    fontSize: 'var(--tb-font-size-sm)',
     fontWeight: 600,
     cursor: 'pointer',
-    transition: 'background-color 0.15s ease',
-  } satisfies React.CSSProperties,
-  buttonDisabled: {
-    opacity: 0.6,
-    cursor: 'not-allowed',
-  } satisfies React.CSSProperties,
+    transition: 'opacity 0.15s',
+  } as React.CSSProperties,
   statusBar: {
     display: 'flex',
     alignItems: 'center',
-    gap: 'calc(var(--sg-spacing-unit) * 3)',
-    padding: 'calc(var(--sg-spacing-unit) * 3)',
-    backgroundColor: 'var(--sg-color-bg-secondary)',
-    borderRadius: 'var(--sg-border-radius)',
-    fontSize: 'var(--sg-font-size-sm)',
-    color: 'var(--sg-color-text-secondary)',
-  } satisfies React.CSSProperties,
+    gap: 10,
+    padding: 12,
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    borderRadius: 'var(--tb-border-radius)',
+    fontSize: 'var(--tb-font-size-sm)',
+    color: 'var(--tb-color-text-secondary)',
+  } as React.CSSProperties,
   spinner: {
-    width: '16px',
-    height: '16px',
-    border: '2px solid var(--sg-color-border)',
-    borderTopColor: 'var(--sg-color-primary)',
+    width: 14,
+    height: 14,
+    border: '2px solid var(--tb-color-border)',
+    borderTopColor: 'var(--tb-color-primary)',
     borderRadius: '50%',
     animation: 'tb-spin 0.8s linear infinite',
     flexShrink: 0,
-  } satisfies React.CSSProperties,
+  } as React.CSSProperties,
   errorBox: {
-    padding: 'calc(var(--sg-spacing-unit) * 3)',
-    backgroundColor: 'var(--sg-color-bg-secondary)',
-    borderRadius: 'var(--sg-border-radius)',
-    border: '1px solid var(--sg-color-critical)',
-    color: 'var(--sg-color-critical)',
-    fontSize: 'var(--sg-font-size-sm)',
-  } satisfies React.CSSProperties,
-  followUpContainer: {
+    padding: 10,
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    borderRadius: 'var(--tb-border-radius)',
+    border: '1px solid var(--tb-color-critical)',
+    color: 'var(--tb-color-critical)',
+    fontSize: 'var(--tb-font-size-sm)',
+  } as React.CSSProperties,
+  upload: {
+    border: '1px dashed var(--tb-color-border)',
+    borderRadius: 'var(--tb-border-radius)',
+    padding: '16px 12px',
+    textAlign: 'center' as const,
+    cursor: 'pointer',
+    transition: 'border-color 0.15s',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+  } as React.CSSProperties,
+  preview: {
+    position: 'relative' as const,
+    display: 'inline-block',
+  } as React.CSSProperties,
+  previewImg: {
+    maxHeight: 120,
+    borderRadius: 'var(--tb-border-radius)',
+    border: '1px solid var(--tb-color-border)',
+  } as React.CSSProperties,
+  removeBtn: {
+    position: 'absolute' as const,
+    top: -6,
+    right: -6,
+    width: 20,
+    height: 20,
+    borderRadius: '50%',
+    border: 'none',
+    backgroundColor: 'var(--tb-color-critical)',
+    color: 'var(--tb-color-primary-text)',
+    fontSize: 12,
+    lineHeight: 1,
+    cursor: 'pointer',
     display: 'flex',
-    gap: 'calc(var(--sg-spacing-unit) * 2)',
-    marginTop: 'calc(var(--sg-spacing-unit) * 4)',
-  } satisfies React.CSSProperties,
+    alignItems: 'center',
+    justifyContent: 'center',
+  } as React.CSSProperties,
+  followUp: {
+    display: 'flex',
+    gap: 8,
+    marginTop: 16,
+  } as React.CSSProperties,
   followUpInput: {
     flex: 1,
-    padding: 'calc(var(--sg-spacing-unit) * 2) calc(var(--sg-spacing-unit) * 3)',
-    borderRadius: 'var(--sg-border-radius)',
-    border: '1px solid var(--sg-color-border)',
-    backgroundColor: 'var(--sg-color-bg)',
-    color: 'var(--sg-color-text)',
-    fontFamily: 'var(--sg-font-family)',
-    fontSize: 'var(--sg-font-size-sm)',
+    padding: '8px 10px',
+    borderRadius: 'var(--tb-border-radius)',
+    border: '1px solid var(--tb-color-border)',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    color: 'var(--tb-color-text)',
+    fontFamily: 'var(--tb-font-family)',
+    fontSize: 'var(--tb-font-size-sm)',
     boxSizing: 'border-box' as const,
-  } satisfies React.CSSProperties,
-} as const;
+    outline: 'none',
+  } as React.CSSProperties,
+};
 
-// Inline keyframes for the spinner
-const spinKeyframes = `
-@keyframes tb-spin {
-  to { transform: rotate(360deg); }
-}
-`;
-
-function StatusDisplay({ status }: { status: TracebackStatus }): React.JSX.Element | null {
+function StatusDisplay({ status }: { status: SigSentryStatus }): React.JSX.Element | null {
   if (status === 'idle' || status === 'complete') return null;
-
   const label = status === 'failed' ? 'Analysis failed' : STAGE_LABELS[status as AnalysisStage] ?? status;
-
   return (
-    <div style={styles.statusBar}>
-      {status !== 'failed' && <div style={styles.spinner} />}
+    <div style={s.statusBar}>
+      {status !== 'failed' && <div style={s.spinner} />}
       <span>{label}</span>
     </div>
   );
@@ -165,6 +193,7 @@ export function AnalysisWidget({
   onError,
   defaultTimeRange = '1h',
   showFollowUp = true,
+  showScreenshot = true,
   className,
 }: AnalysisWidgetProps): React.JSX.Element {
   const { client } = useSigSentryContext();
@@ -172,18 +201,36 @@ export function AnalysisWidget({
 
   const [description, setDescription] = useState('');
   const [timeRange, setTimeRange] = useState<TimeRangeOption>(defaultTimeRange);
+  const [screenshot, setScreenshot] = useState<File | null>(null);
+  const [screenshotPreview, setScreenshotPreview] = useState<string | null>(null);
   const [followUpQuestion, setFollowUpQuestion] = useState('');
   const [followUpAnswer, setFollowUpAnswer] = useState<string | null>(null);
   const [isFollowUpLoading, setIsFollowUpLoading] = useState(false);
   const prevResultRef = useRef<AnalysisResult | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  // Notify parent when analysis completes
   if (result && result !== prevResultRef.current && result.status === 'complete') {
     prevResultRef.current = result;
     onAnalysisComplete?.(result);
   }
-  if (error && onError) {
-    onError(error);
+  if (error && onError) onError(error);
+
+  function handleFile(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0] ?? null;
+    setScreenshot(file);
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => setScreenshotPreview(reader.result as string);
+      reader.readAsDataURL(file);
+    } else {
+      setScreenshotPreview(null);
+    }
+  }
+
+  function removeFile() {
+    setScreenshot(null);
+    setScreenshotPreview(null);
+    if (fileInputRef.current) fileInputRef.current.value = '';
   }
 
   const handleSubmit = useCallback(
@@ -194,18 +241,18 @@ export function AnalysisWidget({
       const rangeOption = TIME_RANGE_OPTIONS.find((o) => o.value === timeRange);
       const ms = rangeOption?.ms ?? 60 * 60 * 1000;
       const now = new Date();
-      const timeStart = new Date(now.getTime() - ms);
 
       setFollowUpAnswer(null);
       prevResultRef.current = null;
 
       await submitAnalysis({
         description: description.trim(),
-        timeStart,
+        timeStart: new Date(now.getTime() - ms),
         timeEnd: now,
+        screenshot: screenshot ?? undefined,
       });
     },
-    [description, timeRange, isLoading, submitAnalysis],
+    [description, timeRange, isLoading, submitAnalysis, screenshot],
   );
 
   const handleFollowUp = useCallback(async () => {
@@ -219,94 +266,94 @@ export function AnalysisWidget({
     setIsFollowUpLoading(false);
   }, [followUpQuestion, isFollowUpLoading, askFollowUp]);
 
+  const showForm = status === 'idle' || status === 'failed';
+
   return (
-    <div style={styles.container} className={className}>
+    <div style={s.container} className={className}>
       <style>{spinKeyframes}</style>
 
-      {/* Input Form */}
-      {status === 'idle' || status === 'failed' ? (
-        <form style={styles.form} onSubmit={handleSubmit}>
+      {showForm && (
+        <form style={s.form} onSubmit={handleSubmit}>
           <div>
-            <label style={styles.label} htmlFor="tb-description">
-              Describe the error
-            </label>
+            <label style={s.label}>Describe the error</label>
             <textarea
-              id="tb-description"
-              style={styles.textarea}
+              style={s.textarea}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
-              placeholder="Describe what happened, paste error messages, or explain the symptoms..."
+              placeholder="What happened? Paste error messages, describe symptoms..."
             />
           </div>
 
+          {showScreenshot && (
+            <div>
+              <label style={s.label}>Screenshot (optional)</label>
+              {screenshotPreview ? (
+                <div style={s.preview}>
+                  <img src={screenshotPreview} alt="Screenshot" style={s.previewImg} />
+                  <button type="button" style={s.removeBtn} onClick={removeFile}>&times;</button>
+                </div>
+              ) : (
+                <div
+                  style={s.upload}
+                  onClick={() => fileInputRef.current?.click()}
+                  onKeyDown={(e) => { if (e.key === 'Enter') fileInputRef.current?.click(); }}
+                  role="button"
+                  tabIndex={0}
+                >
+                  <p style={{ fontSize: 'var(--tb-font-size-sm)', color: 'var(--tb-color-text-secondary)', margin: 0 }}>
+                    Click to upload
+                  </p>
+                  <p style={{ fontSize: 'var(--tb-font-size-xs)', color: 'var(--tb-color-text-muted, var(--tb-color-text-secondary))', marginTop: 4 }}>
+                    PNG, JPG up to 5MB
+                  </p>
+                </div>
+              )}
+              <input ref={fileInputRef} type="file" accept="image/png,image/jpeg,image/webp" onChange={handleFile} style={{ display: 'none' }} />
+            </div>
+          )}
+
           <div>
-            <label style={styles.label} htmlFor="tb-time-range">
-              Time range
-            </label>
-            <select
-              id="tb-time-range"
-              style={styles.select}
-              value={timeRange}
-              onChange={(e) => setTimeRange(e.target.value as TimeRangeOption)}
-            >
-              {TIME_RANGE_OPTIONS.map((option) => (
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
+            <label style={s.label}>Time range</label>
+            <select style={s.select} value={timeRange} onChange={(e) => setTimeRange(e.target.value as TimeRangeOption)}>
+              {TIME_RANGE_OPTIONS.map((o) => (
+                <option key={o.value} value={o.value}>{o.label}</option>
               ))}
             </select>
           </div>
 
           {error && (
-            <div style={styles.errorBox}>
-              {error.code}: {error.message}
-            </div>
+            <div style={s.errorBox}>{error.message}</div>
           )}
 
           <button
             type="submit"
-            style={{
-              ...styles.button,
-              ...(isLoading || !description.trim() ? styles.buttonDisabled : {}),
-            }}
+            style={{ ...s.btn, ...(isLoading || !description.trim() ? { opacity: 0.5, cursor: 'not-allowed' } : {}) }}
             disabled={isLoading || !description.trim()}
           >
             Analyze
           </button>
         </form>
-      ) : null}
+      )}
 
-      {/* Streaming Status */}
       {isLoading && <StatusDisplay status={status} />}
 
-      {/* Result */}
       {result && status === 'complete' && (
         <>
           <AnalysisResultDisplay result={result} />
 
-          {/* Follow-up */}
           {showFollowUp && (
-            <div style={styles.followUpContainer}>
+            <div style={s.followUp}>
               <input
                 type="text"
-                style={styles.followUpInput}
+                style={s.followUpInput}
                 value={followUpQuestion}
                 onChange={(e) => setFollowUpQuestion(e.target.value)}
                 placeholder="Ask a follow-up question..."
-                onKeyDown={(e) => {
-                  if (e.key === 'Enter') {
-                    void handleFollowUp();
-                  }
-                }}
+                onKeyDown={(e) => { if (e.key === 'Enter') void handleFollowUp(); }}
               />
               <button
                 type="button"
-                style={{
-                  ...styles.button,
-                  fontSize: 'var(--sg-font-size-sm)',
-                  padding: 'calc(var(--sg-spacing-unit) * 2) calc(var(--sg-spacing-unit) * 4)',
-                  ...(isFollowUpLoading || !followUpQuestion.trim() ? styles.buttonDisabled : {}),
-                }}
+                style={{ ...s.btn, padding: '8px 16px', ...(isFollowUpLoading || !followUpQuestion.trim() ? { opacity: 0.5, cursor: 'not-allowed' } : {}) }}
                 disabled={isFollowUpLoading || !followUpQuestion.trim()}
                 onClick={() => void handleFollowUp()}
               >
@@ -316,16 +363,7 @@ export function AnalysisWidget({
           )}
 
           {followUpAnswer && (
-            <div
-              style={{
-                marginTop: 'calc(var(--sg-spacing-unit) * 3)',
-                padding: 'calc(var(--sg-spacing-unit) * 3)',
-                backgroundColor: 'var(--sg-color-bg-secondary)',
-                borderRadius: 'var(--sg-border-radius)',
-                fontSize: 'var(--sg-font-size-sm)',
-                lineHeight: 1.6,
-              }}
-            >
+            <div style={{ marginTop: 12, padding: 12, backgroundColor: 'var(--tb-color-bg-secondary)', borderRadius: 'var(--tb-border-radius)', fontSize: 'var(--tb-font-size-sm)', lineHeight: 1.6 }}>
               {followUpAnswer}
             </div>
           )}

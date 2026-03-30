@@ -1,35 +1,48 @@
 :root {
-  /* Colors */
-  --sg-color-primary: #6366f1;
-  --sg-color-primary-hover: #4f46e5;
-  --sg-color-bg: #ffffff;
-  --sg-color-bg-secondary: #f9fafb;
-  --sg-color-text: #111827;
-  --sg-color-text-secondary: #6b7280;
-  --sg-color-border: #e5e7eb;
+  /* Colors — neutral defaults that blend into most UIs */
+  --tb-color-primary: #111827;
+  --tb-color-primary-hover: #1f2937;
+  --tb-color-primary-text: #ffffff;
+  --tb-color-bg: #ffffff;
+  --tb-color-bg-secondary: #f9fafb;
+  --tb-color-text: #111827;
+  --tb-color-text-secondary: #6b7280;
+  --tb-color-text-muted: #9ca3af;
+  --tb-color-border: #e5e7eb;
 
   /* Severity colors */
-  --sg-color-critical: #dc2626;
-  --sg-color-high: #ea580c;
-  --sg-color-medium: #d97706;
-  --sg-color-low: #2563eb;
-  --sg-color-info: #6b7280;
+  --tb-color-critical: #dc2626;
+  --tb-color-high: #ea580c;
+  --tb-color-medium: #ca8a04;
+  --tb-color-low: #2563eb;
+  --tb-color-info: #6b7280;
 
   /* Typography */
-  --sg-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --sg-font-size-sm: 0.875rem;
-  --sg-font-size-base: 1rem;
-  --sg-font-size-lg: 1.125rem;
+  --tb-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --tb-font-size-xs: 0.75rem;
+  --tb-font-size-sm: 0.875rem;
+  --tb-font-size-base: 0.9375rem;
+  --tb-font-size-lg: 1.125rem;
 
   /* Layout */
-  --sg-border-radius: 8px;
-  --sg-spacing-unit: 4px;
+  --tb-border-radius: 6px;
+  --tb-spacing-unit: 4px;
 }
 
 [data-theme='dark'] {
-  --sg-color-bg: #111827;
-  --sg-color-bg-secondary: #1f2937;
-  --sg-color-text: #f9fafb;
-  --sg-color-text-secondary: #9ca3af;
-  --sg-color-border: #374151;
+  --tb-color-primary: #e4e2de;
+  --tb-color-primary-hover: #d1cfc9;
+  --tb-color-primary-text: #0a0a0f;
+  --tb-color-bg: #0a0a0f;
+  --tb-color-bg-secondary: #111118;
+  --tb-color-text: #e4e2de;
+  --tb-color-text-secondary: #8b8b99;
+  --tb-color-text-muted: #5a5a66;
+  --tb-color-border: #1e1e2a;
+
+  --tb-color-critical: #ef4444;
+  --tb-color-high: #f97316;
+  --tb-color-medium: #eab308;
+  --tb-color-low: #3b82f6;
+  --tb-color-info: #6b7280;
 }

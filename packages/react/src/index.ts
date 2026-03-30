@@ -9,7 +9,7 @@ export {
 
 export type {
   SigSentryProviderProps,
-  TracebackTheme,
+  SigSentryTheme,
   AnalysisResultProps,
   AnalysisWidgetProps,
   TimeRangeOption,
@@ -17,5 +17,5 @@ export type {
 } from './components/index.js';
 
 // Hooks
-export { useSigSentry } from './hooks/useTraceback.js';
-export type { UseTracebackOptions, UseTracebackReturn, TracebackStatus } from './hooks/useTraceback.js';
+export { useSigSentry } from './hooks/useSigSentry.js';
+export type { UseSigSentryOptions, UseSigSentryReturn, SigSentryStatus } from './hooks/useSigSentry.js';

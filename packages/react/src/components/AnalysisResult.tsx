@@ -15,73 +15,73 @@ export interface AnalysisResultProps {
 }
 
 const severityColors: Record<AnalysisSeverity, string> = {
-  critical: 'var(--sg-color-critical)',
-  high: 'var(--sg-color-high)',
-  medium: 'var(--sg-color-medium)',
-  low: 'var(--sg-color-low)',
-  info: 'var(--sg-color-info)',
+  critical: 'var(--tb-color-critical)',
+  high: 'var(--tb-color-high)',
+  medium: 'var(--tb-color-medium)',
+  low: 'var(--tb-color-low)',
+  info: 'var(--tb-color-info)',
 };
 
 const styles = {
   container: {
-    fontFamily: 'var(--sg-font-family)',
-    color: 'var(--sg-color-text)',
-    backgroundColor: 'var(--sg-color-bg)',
-    borderRadius: 'var(--sg-border-radius)',
-    border: '1px solid var(--sg-color-border)',
-    padding: 'calc(var(--sg-spacing-unit) * 5)',
+    fontFamily: 'var(--tb-font-family)',
+    color: 'var(--tb-color-text)',
+    backgroundColor: 'var(--tb-color-bg)',
+    borderRadius: 'var(--tb-border-radius)',
+    border: '1px solid var(--tb-color-border)',
+    padding: 'calc(var(--tb-spacing-unit) * 5)',
   } satisfies React.CSSProperties,
   header: {
     display: 'flex',
     alignItems: 'center',
-    gap: 'calc(var(--sg-spacing-unit) * 3)',
-    marginBottom: 'calc(var(--sg-spacing-unit) * 4)',
+    gap: 'calc(var(--tb-spacing-unit) * 3)',
+    marginBottom: 'calc(var(--tb-spacing-unit) * 4)',
   } satisfies React.CSSProperties,
   severityBadge: (severity: AnalysisSeverity): React.CSSProperties => ({
     display: 'inline-block',
-    padding: 'calc(var(--sg-spacing-unit) * 1) calc(var(--sg-spacing-unit) * 3)',
-    borderRadius: 'calc(var(--sg-border-radius) / 2)',
+    padding: 'calc(var(--tb-spacing-unit) * 1) calc(var(--tb-spacing-unit) * 3)',
+    borderRadius: 'calc(var(--tb-border-radius) / 2)',
     backgroundColor: severityColors[severity],
     color: '#ffffff',
-    fontSize: 'var(--sg-font-size-sm)',
+    fontSize: 'var(--tb-font-size-sm)',
     fontWeight: 600,
     textTransform: 'uppercase',
     letterSpacing: '0.05em',
   }),
   section: {
-    marginBottom: 'calc(var(--sg-spacing-unit) * 5)',
+    marginBottom: 'calc(var(--tb-spacing-unit) * 5)',
   } satisfies React.CSSProperties,
   sectionTitle: {
-    fontSize: 'var(--sg-font-size-base)',
+    fontSize: 'var(--tb-font-size-base)',
     fontWeight: 600,
-    marginBottom: 'calc(var(--sg-spacing-unit) * 2)',
-    color: 'var(--sg-color-text)',
+    marginBottom: 'calc(var(--tb-spacing-unit) * 2)',
+    color: 'var(--tb-color-text)',
   } satisfies React.CSSProperties,
   summary: {
-    fontSize: 'var(--sg-font-size-lg)',
+    fontSize: 'var(--tb-font-size-lg)',
     lineHeight: 1.6,
-    color: 'var(--sg-color-text)',
+    color: 'var(--tb-color-text)',
   } satisfies React.CSSProperties,
   confidence: {
-    fontSize: 'var(--sg-font-size-sm)',
-    color: 'var(--sg-color-text-secondary)',
+    fontSize: 'var(--tb-font-size-sm)',
+    color: 'var(--tb-color-text-secondary)',
   } satisfies React.CSSProperties,
   rootCauseBox: {
-    backgroundColor: 'var(--sg-color-bg-secondary)',
-    borderRadius: 'var(--sg-border-radius)',
-    padding: 'calc(var(--sg-spacing-unit) * 4)',
-    border: '1px solid var(--sg-color-border)',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    borderRadius: 'var(--tb-border-radius)',
+    padding: 'calc(var(--tb-spacing-unit) * 4)',
+    border: '1px solid var(--tb-color-border)',
   } satisfies React.CSSProperties,
   tag: {
     display: 'inline-block',
-    padding: 'calc(var(--sg-spacing-unit) * 0.5) calc(var(--sg-spacing-unit) * 2)',
-    borderRadius: 'calc(var(--sg-border-radius) / 2)',
-    backgroundColor: 'var(--sg-color-bg-secondary)',
-    border: '1px solid var(--sg-color-border)',
-    fontSize: 'var(--sg-font-size-sm)',
-    color: 'var(--sg-color-text-secondary)',
-    marginRight: 'calc(var(--sg-spacing-unit) * 2)',
-    marginBottom: 'calc(var(--sg-spacing-unit) * 1)',
+    padding: 'calc(var(--tb-spacing-unit) * 0.5) calc(var(--tb-spacing-unit) * 2)',
+    borderRadius: 'calc(var(--tb-border-radius) / 2)',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    border: '1px solid var(--tb-color-border)',
+    fontSize: 'var(--tb-font-size-sm)',
+    color: 'var(--tb-color-text-secondary)',
+    marginRight: 'calc(var(--tb-spacing-unit) * 2)',
+    marginBottom: 'calc(var(--tb-spacing-unit) * 1)',
   } satisfies React.CSSProperties,
   serviceList: {
     listStyle: 'none',
@@ -92,38 +92,38 @@ const styles = {
     display: 'flex',
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 'calc(var(--sg-spacing-unit) * 2) 0',
-    borderBottom: '1px solid var(--sg-color-border)',
-    fontSize: 'var(--sg-font-size-sm)',
+    padding: 'calc(var(--tb-spacing-unit) * 2) 0',
+    borderBottom: '1px solid var(--tb-color-border)',
+    fontSize: 'var(--tb-font-size-sm)',
   } satisfies React.CSSProperties,
   timelineItem: (isRootCause: boolean): React.CSSProperties => ({
-    padding: 'calc(var(--sg-spacing-unit) * 2) calc(var(--sg-spacing-unit) * 3)',
-    borderLeft: `3px solid ${isRootCause ? 'var(--sg-color-critical)' : 'var(--sg-color-border)'}`,
-    marginBottom: 'calc(var(--sg-spacing-unit) * 2)',
-    backgroundColor: isRootCause ? 'var(--sg-color-bg-secondary)' : 'transparent',
-    borderRadius: '0 var(--sg-border-radius) var(--sg-border-radius) 0',
+    padding: 'calc(var(--tb-spacing-unit) * 2) calc(var(--tb-spacing-unit) * 3)',
+    borderLeft: `3px solid ${isRootCause ? 'var(--tb-color-critical)' : 'var(--tb-color-border)'}`,
+    marginBottom: 'calc(var(--tb-spacing-unit) * 2)',
+    backgroundColor: isRootCause ? 'var(--tb-color-bg-secondary)' : 'transparent',
+    borderRadius: '0 var(--tb-border-radius) var(--tb-border-radius) 0',
   }),
   actionItem: {
-    padding: 'calc(var(--sg-spacing-unit) * 3)',
-    backgroundColor: 'var(--sg-color-bg-secondary)',
-    borderRadius: 'var(--sg-border-radius)',
-    marginBottom: 'calc(var(--sg-spacing-unit) * 2)',
-    border: '1px solid var(--sg-color-border)',
+    padding: 'calc(var(--tb-spacing-unit) * 3)',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    borderRadius: 'var(--tb-border-radius)',
+    marginBottom: 'calc(var(--tb-spacing-unit) * 2)',
+    border: '1px solid var(--tb-color-border)',
   } satisfies React.CSSProperties,
   codeBlock: {
-    backgroundColor: 'var(--sg-color-bg-secondary)',
-    borderRadius: 'var(--sg-border-radius)',
-    padding: 'calc(var(--sg-spacing-unit) * 3)',
+    backgroundColor: 'var(--tb-color-bg-secondary)',
+    borderRadius: 'var(--tb-border-radius)',
+    padding: 'calc(var(--tb-spacing-unit) * 3)',
     fontFamily: 'monospace',
-    fontSize: 'var(--sg-font-size-sm)',
+    fontSize: 'var(--tb-font-size-sm)',
     overflowX: 'auto' as const,
-    border: '1px solid var(--sg-color-border)',
+    border: '1px solid var(--tb-color-border)',
   } satisfies React.CSSProperties,
   logEntry: {
-    padding: 'calc(var(--sg-spacing-unit) * 2)',
-    borderBottom: '1px solid var(--sg-color-border)',
+    padding: 'calc(var(--tb-spacing-unit) * 2)',
+    borderBottom: '1px solid var(--tb-color-border)',
     fontFamily: 'monospace',
-    fontSize: 'var(--sg-font-size-sm)',
+    fontSize: 'var(--tb-font-size-sm)',
     whiteSpace: 'pre-wrap' as const,
     wordBreak: 'break-all' as const,
   } satisfies React.CSSProperties,
@@ -154,7 +154,7 @@ function ServiceRow({ service }: { service: ServiceImpact }): React.JSX.Element 
         <strong>{service.serviceName}</strong>{' '}
         <span style={styles.tag}>{service.role}</span>
       </span>
-      <span style={{ color: 'var(--sg-color-text-secondary)' }}>
+      <span style={{ color: 'var(--tb-color-text-secondary)' }}>
         {service.errorCount} errors
       </span>
     </li>
@@ -164,16 +164,16 @@ function ServiceRow({ service }: { service: ServiceImpact }): React.JSX.Element 
 function TimelineRow({ entry }: { entry: TimelineEntry }): React.JSX.Element {
   return (
     <div style={styles.timelineItem(entry.isRootCause)}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'calc(var(--sg-spacing-unit) * 1)' }}>
-        <span style={{ fontWeight: entry.isRootCause ? 700 : 400, fontSize: 'var(--sg-font-size-sm)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'calc(var(--tb-spacing-unit) * 1)' }}>
+        <span style={{ fontWeight: entry.isRootCause ? 700 : 400, fontSize: 'var(--tb-font-size-sm)' }}>
           {entry.service}
           {entry.isRootCause ? ' (root cause)' : ''}
         </span>
-        <span style={{ fontSize: 'var(--sg-font-size-sm)', color: 'var(--sg-color-text-secondary)' }}>
+        <span style={{ fontSize: 'var(--tb-font-size-sm)', color: 'var(--tb-color-text-secondary)' }}>
           {formatTimestamp(entry.timestamp)}
         </span>
       </div>
-      <div style={{ fontSize: 'var(--sg-font-size-sm)', color: 'var(--sg-color-text-secondary)' }}>
+      <div style={{ fontSize: 'var(--tb-font-size-sm)', color: 'var(--tb-color-text-secondary)' }}>
         {entry.message}
       </div>
     </div>
@@ -183,13 +183,13 @@ function TimelineRow({ entry }: { entry: TimelineEntry }): React.JSX.Element {
 function ActionRow({ action }: { action: SuggestedAction }): React.JSX.Element {
   return (
     <div style={styles.actionItem}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'calc(var(--sg-spacing-unit) * 1)' }}>
-        <span style={{ fontWeight: 600, fontSize: 'var(--sg-font-size-sm)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 'calc(var(--tb-spacing-unit) * 1)' }}>
+        <span style={{ fontWeight: 600, fontSize: 'var(--tb-font-size-sm)' }}>
           {action.action}
         </span>
         <span style={styles.tag}>{actionTypeLabels[action.type]}</span>
       </div>
-      <div style={{ fontSize: 'var(--sg-font-size-sm)', color: 'var(--sg-color-text-secondary)' }}>
+      <div style={{ fontSize: 'var(--tb-font-size-sm)', color: 'var(--tb-color-text-secondary)' }}>
         {action.rationale}
       </div>
     </div>
@@ -221,7 +221,7 @@ export function AnalysisResultDisplay({
       <div style={styles.section}>
         <h3 style={styles.sectionTitle}>Root Cause</h3>
         <div style={styles.rootCauseBox}>
-          <p style={{ margin: '0 0 calc(var(--sg-spacing-unit) * 2) 0' }}>
+          <p style={{ margin: '0 0 calc(var(--tb-spacing-unit) * 2) 0' }}>
             {result.rootCause.description}
           </p>
           <div>
@@ -271,11 +271,11 @@ export function AnalysisResultDisplay({
         <div style={styles.section}>
           <h3 style={styles.sectionTitle}>Code Correlation</h3>
           <div style={styles.rootCauseBox}>
-            <p style={{ margin: '0 0 calc(var(--sg-spacing-unit) * 2) 0', fontWeight: 600 }}>
+            <p style={{ margin: '0 0 calc(var(--tb-spacing-unit) * 2) 0', fontWeight: 600 }}>
               {result.codeCorrelation.suspectedCode.repo} —{' '}
               {result.codeCorrelation.suspectedCode.filePath}
             </p>
-            <p style={{ margin: '0 0 calc(var(--sg-spacing-unit) * 2) 0', fontSize: 'var(--sg-font-size-sm)', color: 'var(--sg-color-text-secondary)' }}>
+            <p style={{ margin: '0 0 calc(var(--tb-spacing-unit) * 2) 0', fontSize: 'var(--tb-font-size-sm)', color: 'var(--tb-color-text-secondary)' }}>
               Function: {result.codeCorrelation.suspectedCode.functionName} (lines{' '}
               {result.codeCorrelation.suspectedCode.lineRange[0]}–
               {result.codeCorrelation.suspectedCode.lineRange[1]})
@@ -284,11 +284,11 @@ export function AnalysisResultDisplay({
               {result.codeCorrelation.suspectedCode.snippet}
             </pre>
             {result.codeCorrelation.causalPR && (
-              <div style={{ marginTop: 'calc(var(--sg-spacing-unit) * 3)' }}>
-                <p style={{ fontWeight: 600, fontSize: 'var(--sg-font-size-sm)', margin: '0 0 calc(var(--sg-spacing-unit) * 1) 0' }}>
+              <div style={{ marginTop: 'calc(var(--tb-spacing-unit) * 3)' }}>
+                <p style={{ fontWeight: 600, fontSize: 'var(--tb-font-size-sm)', margin: '0 0 calc(var(--tb-spacing-unit) * 1) 0' }}>
                   Suspected PR
                 </p>
-                <p style={{ fontSize: 'var(--sg-font-size-sm)', margin: 0 }}>
+                <p style={{ fontSize: 'var(--tb-font-size-sm)', margin: 0 }}>
                   {result.codeCorrelation.causalPR.title} by{' '}
                   {result.codeCorrelation.causalPR.author.name} —{' '}
                   {Math.round(result.codeCorrelation.causalPR.confidence * 100)}% confidence
@@ -303,12 +303,12 @@ export function AnalysisResultDisplay({
       {showRawLogs && result.logEvidence.length > 0 && (
         <div style={styles.section}>
           <h3 style={styles.sectionTitle}>Log Evidence</h3>
-          <div style={{ border: '1px solid var(--sg-color-border)', borderRadius: 'var(--sg-border-radius)', overflow: 'hidden' }}>
+          <div style={{ border: '1px solid var(--tb-color-border)', borderRadius: 'var(--tb-border-radius)', overflow: 'hidden' }}>
             {result.logEvidence
               .sort((a, b) => b.relevanceScore - a.relevanceScore)
               .map((log, index) => (
                 <div key={`log-${index}`} style={styles.logEntry}>
-                  <span style={{ color: 'var(--sg-color-text-secondary)', marginRight: 'calc(var(--sg-spacing-unit) * 2)' }}>
+                  <span style={{ color: 'var(--tb-color-text-secondary)', marginRight: 'calc(var(--tb-spacing-unit) * 2)' }}>
                     [{log.service}]
                   </span>
                   {log.raw}
@@ -319,7 +319,7 @@ export function AnalysisResultDisplay({
       )}
 
       {/* Footer metadata */}
-      <div style={{ fontSize: 'var(--sg-font-size-sm)', color: 'var(--sg-color-text-secondary)', borderTop: '1px solid var(--sg-color-border)', paddingTop: 'calc(var(--sg-spacing-unit) * 3)' }}>
+      <div style={{ fontSize: 'var(--tb-font-size-sm)', color: 'var(--tb-color-text-secondary)', borderTop: '1px solid var(--tb-color-border)', paddingTop: 'calc(var(--tb-spacing-unit) * 3)' }}>
         {result.logsScanned.toLocaleString()} logs scanned · Processed in{' '}
         {(result.processingTimeMs / 1000).toFixed(1)}s
       </div>
