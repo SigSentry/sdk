@@ -1,0 +1,52 @@
+{
+  "name": "@sigsentry/react",
+  "version": "0.1.0",
+  "description": "SigSentry React SDK — drop-in components for AI-powered log analysis",
+  "type": "module",
+  "license": "MIT",
+  "main": "./dist/index.js",
+  "module": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./styles": "./dist/styles/variables.css"
+  },
+  "files": ["dist", "README.md", "LICENSE"],
+  "sideEffects": false,
+  "scripts": {
+    "build": "tsup src/index.ts --format esm --dts --clean",
+    "dev": "tsup src/index.ts --format esm --dts --watch",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "clean": "rm -rf dist"
+  },
+  "dependencies": {
+    "@sigsentry/core": "workspace:*"
+  },
+  "peerDependencies": {
+    "react": ">=18.0.0",
+    "react-dom": ">=18.0.0"
+  },
+  "devDependencies": {
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "tsup": "^8.4.0",
+    "typescript": "^5.7.0",
+    "vitest": "^3.0.0"
+  },
+  "keywords": ["sigsentry", "react", "log-analysis", "ai", "sdk", "widget", "components"],
+  "homepage": "https://sigsentry.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/SigSentry/sdk",
+    "directory": "packages/react"
+  },
+  "bugs": {
+    "url": "https://github.com/SigSentry/sdk/issues"
+  }
+}
