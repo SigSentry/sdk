@@ -29,6 +29,7 @@ const STAGE_LABELS: Record<AnalysisStage, string> = {
   image_processing: 'Processing screenshot...',
   logs_fetching: 'Fetching logs...',
   logs_preprocessing: 'Pre-processing logs...',
+  repo_context: 'Fetching repository context...',
   ai_analyzing: 'AI analyzing root cause...',
   code_correlating: 'Correlating with code changes...',
   complete: 'Analysis complete',

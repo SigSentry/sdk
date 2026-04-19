@@ -1,0 +1,48 @@
+:root {
+  /* Colors — neutral defaults that blend into most UIs */
+  --tb-color-primary: #111827;
+  --tb-color-primary-hover: #1f2937;
+  --tb-color-primary-text: #ffffff;
+  --tb-color-bg: #ffffff;
+  --tb-color-bg-secondary: #f9fafb;
+  --tb-color-text: #111827;
+  --tb-color-text-secondary: #6b7280;
+  --tb-color-text-muted: #9ca3af;
+  --tb-color-border: #e5e7eb;
+
+  /* Severity colors */
+  --tb-color-critical: #dc2626;
+  --tb-color-high: #ea580c;
+  --tb-color-medium: #ca8a04;
+  --tb-color-low: #2563eb;
+  --tb-color-info: #6b7280;
+
+  /* Typography */
+  --tb-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --tb-font-size-xs: 0.75rem;
+  --tb-font-size-sm: 0.875rem;
+  --tb-font-size-base: 0.9375rem;
+  --tb-font-size-lg: 1.125rem;
+
+  /* Layout */
+  --tb-border-radius: 6px;
+  --tb-spacing-unit: 4px;
+}
+
+[data-theme='dark'] {
+  --tb-color-primary: #e4e2de;
+  --tb-color-primary-hover: #d1cfc9;
+  --tb-color-primary-text: #0a0a0f;
+  --tb-color-bg: #0a0a0f;
+  --tb-color-bg-secondary: #111118;
+  --tb-color-text: #e4e2de;
+  --tb-color-text-secondary: #8b8b99;
+  --tb-color-text-muted: #5a5a66;
+  --tb-color-border: #1e1e2a;
+
+  --tb-color-critical: #ef4444;
+  --tb-color-high: #f97316;
+  --tb-color-medium: #eab308;
+  --tb-color-low: #3b82f6;
+  --tb-color-info: #6b7280;
+}

@@ -176,3 +176,50 @@ export interface ServiceRepoMapping {
   pathPrefix: string;
   defaultBranch: string;
 }
+
+// --- Repo Context (analysis pipeline input) ---
+
+export interface PrefetchedFile {
+  repo: string;
+  path: string;
+  sha: string;
+  snippet: string;
+  referencedLines: number[];
+}
+
+export interface RecentPullRequest {
+  repo: string;
+  id: string;
+  title: string;
+  author: string;
+  mergedAt: Date;
+  url: string;
+}
+
+export interface RepoToolCallbacks {
+  getFileContent: (params: { repo: string; path: string; ref?: string }) => Promise<string>;
+  getPullRequestDiff: (params: { repo: string; prId: string }) => Promise<string>;
+}
+
+export interface RepoContext {
+  prefetchedFiles: PrefetchedFile[];
+  recentPRs: RecentPullRequest[];
+  unresolvedServices: string[];
+  toolCallbacks?: RepoToolCallbacks;
+}
+
+export const EMPTY_REPO_CONTEXT: RepoContext = {
+  prefetchedFiles: [],
+  recentPRs: [],
+  unresolvedServices: [],
+};
+
+// --- Repo Credentials (discriminated union stored encrypted) ---
+
+export type RepoCredentials =
+  | { authType: 'pat'; token: string; baseUrl?: string }
+  | { authType: 'github_app'; installationId: string }
+  | { authType: 'gitlab_oauth'; accessToken: string; refreshToken: string; expiresAt: number; baseUrl?: string }
+  | { authType: 'bitbucket_oauth'; accessToken: string; refreshToken: string; expiresAt: number; workspace: string };
+
+export type RepoAuthType = RepoCredentials['authType'];

@@ -58,6 +58,7 @@ export type AnalysisStage =
   | 'image_processing'
   | 'logs_fetching'
   | 'logs_preprocessing'
+  | 'repo_context'
   | 'ai_analyzing'
   | 'code_correlating'
   | 'complete'

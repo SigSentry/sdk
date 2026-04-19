@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SigSentry Embed Demo</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'JetBrains Mono', monospace;
+      background: #0a0a0a;
+      color: #e5e5e5;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 48px 24px;
+    }
+    h1 { font-size: 24px; margin-bottom: 8px; }
+    p.sub { font-size: 13px; color: #737373; margin-bottom: 32px; }
+    .demo-section {
+      width: 100%;
+      max-width: 640px;
+      margin-bottom: 48px;
+    }
+    .demo-section h2 {
+      font-size: 14px;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      color: #1a945c;
+      margin-bottom: 16px;
+    }
+    .demo-section .target {
+      border: 1px solid #262626;
+      padding: 24px;
+      background: #111;
+    }
+    pre {
+      background: #111;
+      border: 1px solid #262626;
+      padding: 16px;
+      font-size: 12px;
+      overflow-x: auto;
+      margin-bottom: 32px;
+      color: #a3a3a3;
+    }
+    code { color: #1a945c; }
+  </style>
+</head>
+<body>
+
+  <h1>SigSentry Embed Demo</h1>
+  <p class="sub">Vanilla JS integration — no React required in your app</p>
+
+  <!-- Example 1: Inline widget -->
+  <div class="demo-section">
+    <h2>Inline Widget</h2>
+    <pre>&lt;div id="widget"&gt;&lt;/div&gt;
+&lt;script&gt;
+  SigSentry.init({
+    target: '#widget',
+    apiKey: 'tb_live_...',
+    baseUrl: 'http://localhost:3001',
+    theme: 'dark',
+    mode: 'inline',
+  });
+&lt;/script&gt;</pre>
+    <div class="target" id="inline-widget"></div>
+  </div>
+
+  <!-- Example 2: Modal trigger -->
+  <div class="demo-section">
+    <h2>Modal Trigger</h2>
+    <pre>&lt;div id="modal-trigger"&gt;&lt;/div&gt;
+&lt;script&gt;
+  SigSentry.init({
+    target: '#modal-trigger',
+    apiKey: 'tb_live_...',
+    mode: 'modal',
+    triggerLabel: 'Report Issue',
+  });
+&lt;/script&gt;</pre>
+    <div class="target" id="modal-trigger"></div>
+  </div>
+
+  <!-- Example 3: Slideout trigger -->
+  <div class="demo-section">
+    <h2>Slideout Trigger</h2>
+    <pre>&lt;div id="slideout-trigger"&gt;&lt;/div&gt;
+&lt;script&gt;
+  SigSentry.init({
+    target: '#slideout-trigger',
+    mode: 'slideout',
+    triggerLabel: 'Analyze Logs',
+  });
+&lt;/script&gt;</pre>
+    <div class="target" id="slideout-trigger"></div>
+  </div>
+
+  <!--
+    In production, load from CDN:
+    <script src="https://cdn.sigsentry.com/embed.iife.js"></script>
+
+    For local dev, use the built IIFE output:
+  -->
+  <script src="../../dist/embed.global.js"></script>
+  <script>
+    // Initialize all three demos
+    SigSentry.init({
+      target: '#inline-widget',
+      apiKey: 'tb_live_demo',
+      baseUrl: 'http://localhost:3001',
+      theme: 'dark',
+      mode: 'inline',
+    });
+
+    SigSentry.init({
+      target: '#modal-trigger',
+      apiKey: 'tb_live_demo',
+      baseUrl: 'http://localhost:3001',
+      theme: 'dark',
+      mode: 'modal',
+      triggerLabel: 'Report Issue',
+    });
+
+    SigSentry.init({
+      target: '#slideout-trigger',
+      apiKey: 'tb_live_demo',
+      baseUrl: 'http://localhost:3001',
+      theme: 'dark',
+      mode: 'slideout',
+      triggerLabel: 'Analyze Logs',
+    });
+  </script>
+
+</body>
+</html>
