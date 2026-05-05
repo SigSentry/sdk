@@ -40,6 +40,11 @@ export interface ApiKeyRecord {
   revoked: boolean;
 }
 
+// Customer-facing API key permissions. `apikey:write` is intentionally
+// not in this list — API key CRUD is dashboard-only (JWT-authenticated),
+// so customer-minted keys can never grant or revoke other keys.
+// Internal role-based permissions (used in JWT permission resolution) may
+// include additional scopes like `apikey:write` and `team:manage`.
 export type ApiKeyPermission =
   | 'analysis:create'
   | 'analysis:read'

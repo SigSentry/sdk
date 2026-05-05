@@ -31,6 +31,24 @@ describe('SigSentryClient', () => {
   });
 
   describe('constructor', () => {
+    it('throws when constructed with a secret key (ss_secret_*)', () => {
+      expect(
+        () => new SigSentryClient({ apiKey: 'ss_secret_abcdef' }),
+      ).toThrow(/public key/);
+    });
+
+    it('throws when constructed with an org key (ss_org_*)', () => {
+      expect(
+        () => new SigSentryClient({ apiKey: 'ss_org_abcdef' }),
+      ).toThrow(/server-side only/);
+    });
+
+    it('accepts an ss_pub_* key without throwing', () => {
+      expect(
+        () => new SigSentryClient({ apiKey: 'ss_pub_abcdef' }),
+      ).not.toThrow();
+    });
+
     it('uses the default base URL when none is provided', () => {
       const defaultClient = new SigSentryClient({ apiKey: 'key' });
       mockFetch.mockResolvedValue(jsonResponse({ success: true, data: {} }));

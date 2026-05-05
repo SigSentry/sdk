@@ -27,6 +27,21 @@ export class SigSentryClient {
   private readonly baseUrl: string;
 
   constructor(config: SigSentryClientConfig) {
+    // The SDK is a public surface — keys live in browsers, mobile apps, and
+    // <script> embeds. Only ss_pub_* keys are safe to ship in those
+    // contexts, so reject ss_secret_* and ss_org_* at construction time
+    // with a clear hint instead of a silent 403 from the API.
+    if (
+      config.apiKey.startsWith('ss_secret_') ||
+      config.apiKey.startsWith('ss_org_')
+    ) {
+      throw new Error(
+        'SigSentry SDK requires a public key (ss_pub_*). ' +
+          'Mint one from Project → SDK Keys in the dashboard. ' +
+          'Secret keys (ss_secret_*, ss_org_*) are server-side only — ' +
+          'shipping them to a browser exposes your account.',
+      );
+    }
     this.apiKey = config.apiKey;
     this.baseUrl = (config.baseUrl ?? 'https://api.sigsentry.com').replace(/\/$/, '');
   }

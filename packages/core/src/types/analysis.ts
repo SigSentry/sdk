@@ -1,5 +1,5 @@
 export type AnalysisSeverity = 'critical' | 'high' | 'medium' | 'low' | 'info';
-export type AnalysisStatus = 'pending' | 'processing' | 'complete' | 'partial' | 'failed';
+export type AnalysisStatus = 'processing' | 'complete' | 'partial' | 'failed';
 
 export interface AnalysisInput {
   screenshot?: File | Buffer;
@@ -41,7 +41,11 @@ export interface AnalysisResult {
     causalPR?: {
       id: string;
       title: string;
-      author: { name: string; username: string };
+      // Author display name only. Profile handle/username deliberately
+      // omitted from the public result so it doesn't fan out to webhook
+      // channels and chat notifications. Use the `url` field to reach
+      // the author's profile via the PR.
+      author: { name: string };
       mergedAt: Date;
       url: string;
       confidence: number;

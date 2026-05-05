@@ -38,7 +38,7 @@ export function useSigSentry({ client }: UseSigSentryOptions): UseSigSentryRetur
       setIsLoading(true);
       setError(null);
       setResult(null);
-      setStatus('input_received');
+      setStatus('received');
 
       try {
         const response = await client.createAnalysis(input, {

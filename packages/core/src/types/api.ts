@@ -53,7 +53,25 @@ export type SSEEvent =
     }
   | { event: 'error'; data: { code: string; message: string } };
 
+/**
+ * Public-facing analysis stage. Coarse, opaque values intended for SDK
+ * consumers and customer dashboards. Internal services use a finer-grained
+ * stage type (see InternalAnalysisStage) which is mapped to this before
+ * emission over the wire.
+ */
 export type AnalysisStage =
+  | 'received'
+  | 'processing'
+  | 'complete'
+  | 'failed';
+
+/**
+ * INTERNAL — granular pipeline stages used by the orchestrator for
+ * observability and debugging. Not exported on the public SDK surface
+ * (see public.ts). Always mapped to the coarse AnalysisStage before being
+ * sent to clients.
+ */
+export type InternalAnalysisStage =
   | 'input_received'
   | 'image_processing'
   | 'logs_fetching'
@@ -63,3 +81,25 @@ export type AnalysisStage =
   | 'code_correlating'
   | 'complete'
   | 'failed';
+
+/**
+ * Map a granular internal stage to the coarse public stage. Used at every
+ * point that emits stage information to a client.
+ */
+export function toPublicStage(stage: InternalAnalysisStage): AnalysisStage {
+  switch (stage) {
+    case 'input_received':
+      return 'received';
+    case 'image_processing':
+    case 'logs_fetching':
+    case 'logs_preprocessing':
+    case 'repo_context':
+    case 'ai_analyzing':
+    case 'code_correlating':
+      return 'processing';
+    case 'complete':
+      return 'complete';
+    case 'failed':
+      return 'failed';
+  }
+}

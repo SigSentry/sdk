@@ -6,7 +6,7 @@
  *   <script>
  *     SigSentry.init({
  *       target: '#sigsentry-widget',
- *       apiKey: 'tb_live_...',
+ *       apiKey: 'ss_live_...',
  *       baseUrl: 'https://api.sigsentry.com',
  *       theme: 'dark', // optional: 'light' | 'dark' | 'auto'
  *       mode: 'inline', // optional: 'inline' | 'modal' | 'slideout'

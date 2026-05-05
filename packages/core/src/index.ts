@@ -30,6 +30,9 @@ export type {
   TimelineEntry,
   LogEvidence,
   SuggestedAction,
+  AnalysisInput,
+  AnalysisFeedback,
+  FollowUpResult,
 } from './types/analysis.js';
 
 // API envelope types

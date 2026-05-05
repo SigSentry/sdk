@@ -25,13 +25,8 @@ const TIME_RANGE_OPTIONS: { value: TimeRangeOption; label: string; ms: number }[
 ];
 
 const STAGE_LABELS: Record<AnalysisStage, string> = {
-  input_received: 'Input received',
-  image_processing: 'Processing screenshot...',
-  logs_fetching: 'Fetching logs...',
-  logs_preprocessing: 'Pre-processing logs...',
-  repo_context: 'Fetching repository context...',
-  ai_analyzing: 'AI analyzing root cause...',
-  code_correlating: 'Correlating with code changes...',
+  received: 'Request received',
+  processing: 'Analyzing...',
   complete: 'Analysis complete',
   failed: 'Analysis failed',
 };

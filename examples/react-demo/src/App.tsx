@@ -9,7 +9,7 @@ import {
 import type { AnalysisResult } from "@sigsentry/core";
 import { CustomAnalysis } from "./CustomAnalysis";
 
-const API_KEY = "tb_live_238863c514b07fbdd2776de5f3a080623765dbb2bf37009e195a3af00cd6fd38";
+const API_KEY = "ss_live_238863c514b07fbdd2776de5f3a080623765dbb2bf37009e195a3af00cd6fd38";
 const API_URL = "http://localhost:3001";
 
 type Tab = "widget" | "trigger" | "custom";

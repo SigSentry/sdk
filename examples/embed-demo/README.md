@@ -22,7 +22,7 @@ The IIFE build bundles React internally and exposes a global `SigSentry` object:
 <script>
   SigSentry.init({
     target: '#widget',
-    apiKey: 'tb_live_...',
+    apiKey: 'ss_live_...',
     baseUrl: 'https://api.yourdomain.com',
     theme: 'dark',
     mode: 'inline',       // or 'modal', 'slideout'
